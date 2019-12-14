@@ -10,8 +10,6 @@ if "%command%"=="" (
 )
 shift /0
 
-
-
 if "%command%"=="-h" (
     goto help
 ) else if "%2" == "" (
@@ -83,6 +81,8 @@ if "%version%" == "" (
         set c2=%%b
         set c3=%%c
     )
+
+    echo,
 
     if "%c1%" == "" (
         set version=v0.0.1
