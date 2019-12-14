@@ -1,5 +1,8 @@
 @echo off
 
+set version=
+set remark=
+
 :param
 set command=%1
 if "%command%"=="" (
@@ -9,7 +12,7 @@ shift /0
 
 
 
- if "%command%"=="-h" (
+if "%command%"=="-h" (
     goto help
 ) else if "%2" == "" (
     set param=%command%
@@ -56,7 +59,7 @@ echo tager [param]
 echo equle with: -m [param]
 echo,
 
-goto end
+goto out
 
 :end
 
@@ -80,7 +83,7 @@ if "%version%" == "" (
         set c2=%%b
         set c3=%%c
     )
-    
+
     if "%c1%" == "" (
         set version=v0.0.1
     ) else (
@@ -96,3 +99,5 @@ echo git tag -a %version% -m %remark%
 
 git tag -a %version% -m %remark%
 git push origin --tag
+
+:out
