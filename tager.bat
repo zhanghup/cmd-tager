@@ -1,5 +1,7 @@
 @echo off
 
+set commit=false
+set target=false
 set version=
 set remark=
 
@@ -12,6 +14,12 @@ shift /0
 
 if "%command%"=="-h" (
     goto help
+) else "%command%"=="-c" (
+    set commit=true
+    goto param
+) else "%command%"=="-t" (
+    set target=true
+    goto param
 ) else if "%2" == "" (
     set param=%command%
     goto remark
@@ -51,6 +59,8 @@ echo command
 echo -h    help
 echo -v    add verion info
 echo -m    add remark info
+echo -c    commit and push changes
+echo -t    create tag and push it 
 echo,
 
 echo tager [param]
@@ -67,8 +77,8 @@ if "%remark%" == "" (
 
 git pull
 git add .
-git commit -m %remark%
-git push
+rem git commit -m %remark%
+rem git push
 
 if "%version%" == "" (
     for /F %%i in ('git describe --tag') do ( set gittag=%%i)
@@ -97,7 +107,7 @@ if "%version%" == "" (
 
 echo git tag -a %version% -m %remark%
 
-git tag -a %version% -m %remark%
-git push origin --tag
+rem git tag -a %version% -m %remark%
+rem git push origin --tag
 
 :out
