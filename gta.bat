@@ -95,15 +95,21 @@ git pull
 git add .
 
 if "%commit%" equ "true" (
+    echo ++++++++++++++++++++++++++++++++++++
+    echo,
     echo git commit -m %remark% and git push
+    echo,
+    echo ++++++++++++++++++++++++++++++++++++
     git commit -m %remark%
     git push
 )
 
 if "%target%" == "true" (
+    echo ++++++++++++++++++++++++++++++++++++
     echo,
     echo  git tag -a %version% -m %remark% and push origin --tag
     echo,
+    echo ++++++++++++++++++++++++++++++++++++
     git tag -a %version% -m %remark%
     git push origin --tag
 )
