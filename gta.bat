@@ -97,8 +97,8 @@ git add .
 if "%commit%" equ "true" (
     echo ############################ commit ###############################
     echo,
-    echo git commit -m %remark% 
-    echo git push
+    echo    git commit -m %remark% 
+    echo    git push
     echo,
     echo ###################################################################
     git commit -m %remark%
@@ -108,8 +108,8 @@ if "%commit%" equ "true" (
 if "%target%" == "true" (
     echo ############################ publish ##############################
     echo,
-    echo git tag -a %version% -m %remark% 
-    echo push origin --tag
+    echo    git tag -a %version% -m %remark% 
+    echo    push origin --tag
     echo,
     echo ###################################################################
     git tag -a %version% -m %remark%
