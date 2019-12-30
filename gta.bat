@@ -94,17 +94,16 @@ if "%version%" == "" (
 git pull
 git add .
 
-echo ============ %commit%
 if "%commit%" equ "true" (
-    echo ============1
     echo git commit -m %remark% and git push
     git commit -m %remark%
     git push
 )
 
-echo commit=%commit% tagert=%target%  remark=%remark% version=%version%
-
 if "%target%" == "true" (
+    echo,
+    echo  git tag -a %version% -m %remark% and push origin --tag
+    echo,
     git tag -a %version% -m %remark%
     git push origin --tag
 )
