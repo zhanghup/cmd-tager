@@ -95,9 +95,10 @@ git pull
 git add .
 
 if "%commit%" equ "true" (
-    echo ############################ 提交 #################################
+    echo ############################ commit ###############################
     echo,
-    echo git commit -m %remark% and git push
+    echo git commit -m %remark% 
+    echo git push
     echo,
     echo ###################################################################
     git commit -m %remark%
@@ -105,9 +106,10 @@ if "%commit%" equ "true" (
 )
 
 if "%target%" == "true" (
-    echo ############################ 发布 #################################
+    echo ############################ publish ##############################
     echo,
-    echo  git tag -a %version% -m %remark% and push origin --tag
+    echo git tag -a %version% -m %remark% 
+    echo push origin --tag
     echo,
     echo ###################################################################
     git tag -a %version% -m %remark%
