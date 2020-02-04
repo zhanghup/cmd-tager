@@ -91,7 +91,9 @@ if "%version%" == "" (
 )
 
 
-git pull
+git pull --tags --force
+git submodule update --remote --init --force
+
 git add .
 
 if "%commit%" equ "true" (
