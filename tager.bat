@@ -1,54 +1,52 @@
 @echo off
 
+
+
 set commit=false
 set target=false
 set version=
 set remark=
 
+if "%1" == "" (
+    set commit=true
+    set target=true
+    set version=
+    set remark=sync
+)
+
 :param
 set command=%1
 if "%command%"=="" (
-    goto end
+    goto result
 )
+
 shift /0
 
-if "%command%"=="-h" (
+if "%command%" == "" (
+    goto result
+) else if "%command%"=="-h" (
     goto help
-) else "%command%"=="-c" (
+) else if "%command%"=="-c" (
     set commit=true
     goto param
-) else "%command%"=="-t" (
+) else if "%command%"=="-t" (
     set target=true
     goto param
-) else if "%2" == "" (
-    set param=%command%
-    goto remark
+) else if "%1" == "" (
+    goto result
 ) else (
-	set param=%1
     shift /0
-    if "%param%"=="" (
-        goto end
-    )
-	
+
     if "%command%"=="-v" (
-        goto version
+        set version=%1
     ) else if "%command%"=="-m" (
-        goto remark
-    ) else (
-        goto param
-    )
+        set remark=%1
+    set commit=true
+    set target=true
+    ) 
+
+    goto param
 )
-
-
-
-
-:version
-set version=%param%
-goto param
-
-:remark
-set remark=%param%
-goto param
 
 :help
 echo --- git auto commit ---
@@ -69,45 +67,57 @@ echo,
 
 goto out
 
-:end
 
-if "%remark%" == "" (
-    set remark=sync
+:GetVersion
+
+if "%version%" neq "" (
+    goto result
 )
 
-git pull
-git add .
-rem git commit -m %remark%
-rem git push
+for /F %%i in ('git describe --tag') do ( set tagversion=%%i)
 
+for /f "tokens=1,2,3 delims=.|-|v" %%a in ("%tagversion%") do (
+    set c1=%%a
+    set c2=%%b
+    set c3=%%c
+)
+
+echo,
+
+set /a c3=%c3%+1
+set version=v%c1%.%c2%.%c3%
+
+:result
 if "%version%" == "" (
-    for /F %%i in ('git describe --tag') do ( set gittag=%%i)
-
-    if "%1" == "-v" set version=%2
-
-    for /f "tokens=1,2,3 delims=.|-|v" %%a in ("%gittag%") do (
-
-        set c1=%%a
-        set c2=%%b
-        set c3=%%c
-    )
-
-    echo,
-
-    if "%c1%" == "" (
-        set version=v0.0.1
-    ) else (
-        set /a c3=%c3%+1
-        set version=v%c1%.%c2%.%c3%
-    )
-
-    
+    goto GetVersion
 )
 
 
-echo git tag -a %version% -m %remark%
+git pull --tags --force
+git submodule update --remote --init --force
 
-rem git tag -a %version% -m %remark%
-rem git push origin --tag
+git add .
+
+if "%commit%" equ "true" (
+    echo ############################ commit ###############################
+    echo,
+    echo    git commit -m %remark% 
+    echo    git push
+    echo,
+    echo ###################################################################
+    git commit -m %remark%
+    git push
+)
+
+if "%target%" == "true" (
+    echo ############################ publish ##############################
+    echo,
+    echo    git tag -a %version% -m %remark% 
+    echo    push origin --tag
+    echo,
+    echo ###################################################################
+    git tag -a %version% -m %remark%
+    git push origin --tag
+)
 
 :out
